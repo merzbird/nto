@@ -1,15 +1,12 @@
 package nto;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.graphstream.graph.ElementNotFoundException;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.MultiGraph;
-import org.graphstream.stream.GraphParseException;
 
 import nto.core.Topology;
 import nto.core.TopologyOptimizationContext;
@@ -17,7 +14,7 @@ import nto.methods.CoordinatewiseOptimization;
 import nto.methods.SimulatedAannealingOptimization;
 import nto.methods.TabuSearchOptimization;
 import nto.methods.common.Optimization;
-import nto.util.DgsWriter;
+import nto.util.GraphResolver;
 import nto.util.RandomReader;
 
 public class App {
@@ -46,20 +43,18 @@ public class App {
 		TopologyOptimizationContext context = new TopologyOptimizationContext(muberOfNodes, new RandomReader().readHead(inputFile), new RandomReader().read(inputFile));
 		Topology optimalTopology = parseArg(method).optimalTopology(context);
 		System.out.println("Optimal topology found... Cost = " + optimalTopology.getResult());
-		new DgsWriter().write("/output/graph.dgs", optimalTopology);
 		System.out.println("Creating graph...");
+		Graph graph = new GraphResolver().get(optimalTopology);
 		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-		Graph graph = new MultiGraph("OptTopology");
 		try {
-			graph.read(Paths.get(".").toAbsolutePath().normalize().toString() + "/output/graph.dgs");
-			graph.addAttribute("ui.stylesheet", new String(Files.readAllBytes(Paths.get(Thread.currentThread().getContextClassLoader().getResource(css).toURI())), Charset.forName("UTF-8")));
-		} catch (ElementNotFoundException | IOException | GraphParseException | URISyntaxException e) {
+			graph.addAttribute("ui.stylesheet", new String(Files.readAllBytes(Paths.get(css)), Charset.forName("UTF-8")));
+		} catch (ElementNotFoundException | IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		graph.display(false);
 		System.out.println("Saving graph...");
-		graph.addAttribute("ui.screenshot", Paths.get(".").toAbsolutePath().normalize().toString() + "/output/" + outputFile);
+		graph.addAttribute("ui.screenshot", outputFile);
 	}
 
 	private static Optimization parseArg(String arg) {
