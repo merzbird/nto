@@ -9,12 +9,14 @@ public class Topology {
 	private final Set<Point> nodes;
 	private final Set<Point> elements;
 	private final Map<Point, Point> connections;
+	private final double result;
 
-	public Topology(Point center, Set<Point> nodes, Set<Point> elements, Map<Point, Point> connections) {
+	public Topology(Point center, Set<Point> nodes, Set<Point> elements, Map<Point, Point> connections, double result) {
 		this.center = center;
 		this.nodes = nodes;
 		this.elements = elements;
 		this.connections = connections;
+		this.result = result;
 	}
 
 	public Set<Point> getNodes() {
@@ -31,5 +33,9 @@ public class Topology {
 
 	public Map<Point, Point> getConnections() {
 		return connections;
+	}
+
+	public double getResult() {
+		return result;
 	}
 }

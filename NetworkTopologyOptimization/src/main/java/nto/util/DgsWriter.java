@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map.Entry;
@@ -14,7 +15,7 @@ import nto.core.Topology;
 public class DgsWriter {
 
 	public void write(String filename, Topology topology) {
-		File out = new File(filename);
+		File out = new File(Paths.get(".").toAbsolutePath().normalize().toString() + filename);
 		try (FileWriter fw = new FileWriter(out); BufferedWriter writer = new BufferedWriter(fw);) {
 			writeHeader(writer);
 			writeCenter(writer, topology);

@@ -13,10 +13,19 @@ public class RandomReader {
 
 	public Set<Point> read(String filename) {
 		try {
-			return Files.lines(Paths.get(filename)).map(Point::element).collect(toSet());
+			return Files.lines(Paths.get(Thread.currentThread().getContextClassLoader().getResource(filename).toURI())).skip(1).map(Point::element).collect(toSet());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Collections.emptySet();
+		}
+	}
+
+	public Point readHead(String filename) {
+		try {
+			return Point.center(Files.lines(Paths.get(Thread.currentThread().getContextClassLoader().getResource(filename).toURI())).findFirst().orElse("50;50"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 

@@ -26,6 +26,10 @@ public class Point {
 		return new Point(Type.CENTER, x, y);
 	}
 
+	public static Point center(String line) {
+		return center(Float.valueOf(line.split(";")[0]), Float.valueOf(line.split(";")[1]));
+	}
+
 	public static Point element(String line) {
 		return element(Float.valueOf(line.split(";")[0]), Float.valueOf(line.split(";")[1]));
 	}

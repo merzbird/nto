@@ -65,7 +65,7 @@ public class CostCriteria implements Criteria<CostCriteriaCalculationContext> {
 			}
 			pathCost += minNodePath;
 		}
-		return new CriteriaCalculationResult(pointsCost + pathCost, connections);
+		return new CriteriaCalculationResult(pointsCost + pathCost, connections, nodes);
 	}
 
 	private Set<Point> nodesExcept(Set<Point> possiblePointsForNodes, Point node) {
